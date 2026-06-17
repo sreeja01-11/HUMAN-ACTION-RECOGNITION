@@ -25,9 +25,11 @@ UCF101_ACTION_RECOGNITION/
 ├── data_loader.py            # Logic for loading and splitting the UCF101 dataset
 ├── dataset.py                # PyTorch Dataset class for video processing
 ├── evaluate.py               # Script to generate F1-scores and accuracy reports
+├── evaluation_results.json   # Validation metrics and class-wise evaluation results
 ├── preprocess.py             # Video processing (sampling, resizing, normalization)
 ├── r3d_model.py              # Model architecture definition (Torchvision R3D-18)
 ├── requirements.txt          # Python dependencies
+└── .gitignore                # Ignore large files such as model weights
 ```
 
 ---
@@ -36,7 +38,7 @@ UCF101_ACTION_RECOGNITION/
 
 ### 1. Training (The Notebook Phase)
 
-The model is trained using Transfer Learning. We take a pre-trained `r3d_18` model (trained on Kinetics-400) and replace the final fully connected layer to match the 101 classes of UCF101.
+The model is trained using Transfer Learning. A pre-trained `r3d_18` model (trained on Kinetics-400) is fine-tuned on the UCF101 dataset by replacing the final classification layer with a 101-class output layer. Using pretrained spatiotemporal features significantly reduces training time and improves generalization across diverse human actions.
 
 * **Input:** Video clips are sampled into 16-frame sequences.
 * **Processing:** Frames are resized to 112x112 and normalized.
@@ -142,29 +144,39 @@ The trained R3D-18 model was evaluated on the UCF101 validation set containing *
 | Weighted F1 Score   | **0.9790**      |
 | Correct Predictions | **1638 / 1673** |
 
-### Best Performing Classes
+## Note on Dataset and Model Weights
 
-| Action Class   | F1 Score |
-| -------------- | -------- |
-| ApplyEyeMakeup | 1.00     |
-| ApplyLipstick  | 1.00     |
-| Archery        | 1.00     |
-| BabyCrawling   | 1.00     |
-| BaseballPitch  | 1.00     |
+The UCF101 dataset and trained model weights (`best_model.pth`) are not included in this repository due to size constraints.
 
-### Most Challenging Classes
+### Dataset Setup
 
-| Action Class      | F1 Score |
-| ----------------- | -------- |
-| BasketballDunk    | 0.65     |
-| Basketball        | 0.67     |
-| RopeClimbing      | 0.90     |
-| VolleyballSpiking | 0.90     |
-| Punch             | 0.95     |
+To run training, evaluation, or real-time inference, users must first download the UCF101 dataset and organize it into the following structure:
 
-The lower scores for Basketball and BasketballDunk indicate that visually similar actions remain challenging to distinguish, highlighting the importance of temporal feature learning in video understanding.
+```text
+UCF101/
+├── train/
+├── val/
+├── test/
+├── train.csv
+├── val.csv
+└── test.csv
+```
 
-> **Note:** The UCF101 dataset and pretrained model weights (`best_model.pth`) are not included in this repository due to size constraints. Users must download the dataset separately and train the model or provide their own trained weights before running evaluation.
+The dataset should contain all 101 action classes from the UCF101 benchmark.
+
+### Model Weights
+
+The trained model weights (`best_model.pth`) are not included because GitHub enforces a 100 MB file size limit, while the trained R3D-18 model exceeds this limit.
+
+To reproduce the results:
+
+1. Download and prepare the UCF101 dataset.
+2. Run the training notebook (`webcam.ipynb`) to train the model.
+3. Save the generated weights as `best_model.pth`.
+4. Place `best_model.pth` in the project root directory.
+5. Run `dashboard.py` for real-time inference or `evaluate.py` for validation metrics.
+
+The complete evaluation summary is available in `evaluation_results.json`.
 
 
 ---
