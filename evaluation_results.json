@@ -1,0 +1,51 @@
+{
+  "val_accuracy": 97.91,
+  "correct": 1638,
+  "total": 1673,
+  "macro_avg_f1": 0.9817,
+  "weighted_avg_f1": 0.979,
+  "best_5_classes": [
+    [
+      "ApplyEyeMakeup",
+      1.0
+    ],
+    [
+      "ApplyLipstick",
+      1.0
+    ],
+    [
+      "Archery",
+      1.0
+    ],
+    [
+      "BabyCrawling",
+      1.0
+    ],
+    [
+      "BaseballPitch",
+      1.0
+    ]
+  ],
+  "worst_5_classes": [
+    [
+      "BasketballDunk",
+      0.65
+    ],
+    [
+      "Basketball",
+      0.67
+    ],
+    [
+      "RopeClimbing",
+      0.9
+    ],
+    [
+      "VolleyballSpiking",
+      0.9
+    ],
+    [
+      "Punch",
+      0.95
+    ]
+  ]
+}
